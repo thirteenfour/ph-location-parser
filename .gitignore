@@ -1,6 +1,7 @@
 # Ignore input data and output data
 data/
 out/
+reference/
 
 # Ignore notes file, if any
 notes.md

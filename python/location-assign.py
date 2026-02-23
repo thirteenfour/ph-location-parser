@@ -6,21 +6,8 @@
 # ======
 
 # ======
-# Globals
+# Imports
 # ======
-currentLocation = "";
-uniqueLocationOutput = "";
-
-# ======
-# Processing Functions
-# ======
-def browseLocations():
-  pass
-def browsePSGC():
-  pass
-def processFiles():
-  pass
-
 # TKinter components
 from tkinter import *
 from tkinter import filedialog
@@ -30,6 +17,50 @@ import pandas as pd
 import json
 # for date and time
 from datetime import datetime
+ 
+# ======
+# Globals
+# ======
+currentLocation = ""
+uniqueLocationOutput = ""
+# input files
+filename_inputPSGC = ""
+filename_inputLocations = ""
+dataInputLocations = ""
+dataPSGC = ""
+
+# ======
+# Processing Functions
+# ======
+def browseLocations():
+  global filename_inputLocations
+  filename_inputLocations = filedialog.askopenfilename(initialdir = "/",
+                                        title = "Select a File",
+                                        filetypes = (("JSON Files", "*.json"),
+                                                     ("All Files", "*.*")))
+def browsePSGC():
+  global filename_inputPSGC
+  filename_inputPSGC = filedialog.askopenfilename(initialdir = "/",
+                                        title = "Select a File",
+                                        filetypes = (("JSON Files", "*.json"),
+                                                     ("All Files", "*.*")))
+def processFiles():
+  global filename_inputLocations, filename_inputPSGC, dataInputLocations, dataPSGC
+  # try showing the filenames
+  # print(filename_inputLocations, filename_inputPSGC)
+  # try opening the files
+  try:
+    dataInputLocations = json.load(open(filename_inputLocations))
+    print("Input Raw Locations Loaded.")
+  except:
+    print("Error in opening input raw locations file")
+    raise
+  try:
+    dataPSGC = json.load(open(filename_inputPSGC))
+    print("PSGC Locations Loaded.")
+  except:
+    print("Error in opening PSGC locations file")
+    raise
 
 # ======
 # TKinter
