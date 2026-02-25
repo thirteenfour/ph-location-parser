@@ -8,6 +8,8 @@
 # ======
 # Imports
 # ======
+# find the path
+import os
 # TKinter components
 from tkinter import *
 from tkinter import filedialog
@@ -28,39 +30,47 @@ filename_inputPSGC = ""
 filename_inputLocations = ""
 dataInputLocations = ""
 dataPSGC = ""
+# current working directory
+current_directory = os.path.abspath(os.getcwd())
+# location segments to assign
+selectedRegion = "---"
+selectedProvinceHUC = "---"
+selectedCityMun = "---"
+selectedBarangay = "---"
 
 # ======
 # Processing Functions
 # ======
 def browseLocations():
   global filename_inputLocations
-  filename_inputLocations = filedialog.askopenfilename(initialdir = "/",
+  filename_inputLocations = filedialog.askopenfilename(initialdir = current_directory,
                                         title = "Select a File",
                                         filetypes = (("JSON Files", "*.json"),
                                                      ("All Files", "*.*")))
 def browsePSGC():
   global filename_inputPSGC
-  filename_inputPSGC = filedialog.askopenfilename(initialdir = "/",
+  filename_inputPSGC = filedialog.askopenfilename(initialdir = current_directory,
                                         title = "Select a File",
                                         filetypes = (("JSON Files", "*.json"),
                                                      ("All Files", "*.*")))
 def processFiles():
-  global filename_inputLocations, filename_inputPSGC, dataInputLocations, dataPSGC
+  global filename_inputLocations, filename_inputPSGC, dataInputLocations, dataPSGC, selectedRegion, selectedProvinceHUC, selectedCityMun
+  # show the path
+  # print(current_directory)
   # try showing the filenames
   # print(filename_inputLocations, filename_inputPSGC)
   # try opening the files
   try:
-    dataInputLocations = json.load(open(filename_inputLocations))
+    dataInputLocations = json.load(open(filename_inputLocations, encoding="utf8"))
     print("Input Raw Locations Loaded.")
   except:
     print("Error in opening input raw locations file")
     raise
   try:
-    dataPSGC = json.load(open(filename_inputPSGC))
+    dataPSGC = json.load(open(filename_inputPSGC, encoding="utf8"))
     print("PSGC Locations Loaded.")
   except:
     print("Error in opening PSGC locations file")
-    raise
 
 # ======
 # TKinter
@@ -95,6 +105,13 @@ button_explore_json = Button(window,
                              text = "Browse Files",
                              command = browsePSGC,
                              width = 15)
+# label for current location
+label_current_location = Label(window,
+                   text = "Current Location:",
+                   width = 20,
+                   height = 3)
+# input for location segments
+dropdown_region = OptionMenu(window, selectedRegion, "---")
 # input month
 # dropdown_month = OptionMenu(window, 
 #                             selectedMonth, 
@@ -124,11 +141,13 @@ label_json.grid(column = 1, row = 1)
 button_explore_json.grid(column = 2, row = 1)
 # dropdown_month.grid(column = 1, row = 2)
 # text_year.grid(column = 2, row = 2)
-inputlabel.grid(column = 1, row = 3)
-button_explore.grid(column = 2, row = 3)
+inputlabel.grid(column = 1, row = 2)
+button_explore.grid(column = 2, row = 2)
+label_current_location.grid(column = 1, columnspan = 3, row = 3)
+dropdown_region.grid(column = 1, row = 4)
 # label_status.grid(column = 1, row = 4)
-button_process.grid(column = 2, row = 4)
-button_exit.grid(column = 1, row = 5)
+button_process.grid(column = 1, row = 5)
+button_exit.grid(column = 2, row = 5)
 
 # enter event loop
 window.mainloop()
